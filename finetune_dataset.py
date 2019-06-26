@@ -21,8 +21,6 @@ from pytorch_pretrained_bert.modeling import BertForMaskedLM
 from pytorch_pretrained_bert.optimization import BertAdam
 from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 
-import train_text_classifier
-
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
                     level=logging.INFO)
@@ -140,7 +138,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
         # Due to we use conditional bert, we need to place label information in segment_ids
         tokens = []
         segment_ids = []
-        # is [CLS]和[SEP] needed ？
+        # is [CLS][SEP] needed?
         tokens.append("[CLS]")
         segment_ids.append(segment_id)
         for token in tokens_a:

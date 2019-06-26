@@ -140,7 +140,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
         # Due to we use conditional bert, we need to place label information in segment_ids
         tokens = []
         segment_ids = []
-        # is [CLS]和[SEP] needed ？
+        # is [CLS][SEP] needed?
         tokens.append("[CLS]")
         segment_ids.append(segment_id)
         for token in tokens_a:
