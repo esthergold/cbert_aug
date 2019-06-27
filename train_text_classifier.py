@@ -138,7 +138,7 @@ def train(args, print_log=False):
     # Set up a trainer
     updater = training.StandardUpdater(
         train_iter, optimizer,
-        converter=convert_seq, device=args.device_id)
+        converter=convert_seq, device=args.gpu)
 
     from triggers import FailMaxValueTrigger
     stop_trigger = FailMaxValueTrigger(
@@ -151,7 +151,7 @@ def train(args, print_log=False):
     # VALIDATION SET
     trainer.extend(MicroEvaluator(
         test_iter, model,
-        converter=convert_seq, device=args.device_id))
+        converter=convert_seq, device=args.gpu))
 
     if args.validation:
      real_test_iter = chainer.iterators.SerialIterator(
@@ -159,7 +159,7 @@ def train(args, print_log=False):
         repeat=False, shuffle=False)
     eval_on_real_test = MicroEvaluator(
         real_test_iter, model,
-        converter=convert_seq, device=args.device_id)
+        converter=convert_seq, device=args.gpu)
     eval_on_real_test.default_name = 'test'
     trainer.extend(eval_on_real_test)
 
