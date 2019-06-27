@@ -40,7 +40,9 @@ args.model = configs_dict.get("eval_model")
 def main():
 
     print(json.dumps(args.__dict__, indent=2))
-    train(dir="aug_data", print_log=True)
+    #train(dir="aug_data", print_log=True)
+    test_acc = train(dir="datasets", print_log=True)
+    print("test acc {} on original dataset {}".format(test_acc, args.dataset))
 
 
 def train(dir="datasets", print_log=False):
