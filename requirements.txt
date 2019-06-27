@@ -4,3 +4,8 @@ pandas
 pytorch-pretrained-bert
 tqdm
 
+cupy
+chainer
+progressbar
+
+
