@@ -26,26 +26,24 @@ from utils import UnkDropout, Outer
 #cupy.cuda.set_allocator(None)
 #cupy.cuda.set_pinned_memory_allocator(None)
 
-# default local parameters -- no need to change
-parser = args_of_text_classifier.get_basic_arg_parser()
-args = parser.parse_args()
-
-# load global parameters
-with open("global.config", 'rb') as f:
-    configs_dict = json.load(f)
-
-args.dataset = configs_dict.get("dataset")
-args.model = configs_dict.get("eval_model")
-
 def main():
+    parser = args_of_text_classifier.get_basic_arg_parser()
+    parser.add_argument("--data_dir", default="datasets", type=str,
+                        help="The input data dir. Should contain the .tsv files for the task.")
+    parser.add_argument("--dataset",default="stsa.binary", type=str,
+                        help="The name of the dataset/task to evaluate.")
+    args = parser.parse_args()
+    args.data_dir = os.path.join(args.data_dir, args.dataset)
+    print('data dir: {}'.format(args.data_dir))
+    args.output_dir = os.path.join(args.data_dir, args.out)
+    print('output dir: {}'.format(args.output_dir))
 
     print(json.dumps(args.__dict__, indent=2))
-    #train(dir="aug_data", print_log=True)
-    test_acc = train(dir="datasets", print_log=True)
+    test_acc = train(args, print_log=True)
     print("test acc {} on original dataset {}".format(test_acc, args.dataset))
 
 
-def train(dir="datasets", print_log=False):
+def train(args, print_log=False):
     chainer.CHAINER_SEED = args.seed
     numpy.random.seed(args.seed)
 
@@ -62,7 +60,7 @@ def train(dir="datasets", print_log=False):
     elif args.dataset in ['TREC', 'stsa.binary', 'stsa.fine',
                           'custrev', 'mpqa', 'rt-polarity', 'subj']:
         train, test, real_test, vocab = text_datasets.read_text_dataset(
-            args.dataset, vocab=None, dir=dir)
+            args.dataset, vocab=None, dir=args.data_dir)
         #train, test, vocab = text_datasets.get_other_text_dataset(
         #    args.dataset, vocab=vocab)
     #if args.validation:
@@ -150,7 +148,7 @@ def train(dir="datasets", print_log=False):
         key='validation/main/accuracy', trigger=(1, 'epoch'),
         n_times=args.stop_epoch, max_trigger=args.epoch)
     trainer = training.Trainer(
-        updater, stop_trigger, out=args.out)
+        updater, stop_trigger, out=args.output_dir)
 
     # Evaluate the model with the test dataset for each epoch
     # VALIDATION SET
