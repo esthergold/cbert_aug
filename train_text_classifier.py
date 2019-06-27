@@ -123,7 +123,6 @@ def train(args, print_log=False):
                 augment_ratio=args.bilm_ratio,
                 ignore_unk=vocab['<unk>'])
 
-    args.device_id = args.gpu
     if args.gpu >= 0:
         # Make a specified GPU current
         chainer.cuda.get_device_from_id(args.gpu).use()
