@@ -273,7 +273,7 @@ def main():
 
     args.task_name = configs_dict.get("dataset")
     print(args)
-    run_aug(args, save_every_epoch=False)
+    run_aug(args, save_every_epoch=True)
 
 
 def run_aug(args, save_every_epoch=False):
