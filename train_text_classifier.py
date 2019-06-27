@@ -31,7 +31,6 @@ def main():
     parser.add_argument("--data_dir", default="datasets", type=str,
                         help="The input data dir. Should contain the .tsv files for the task.")
     args = parser.parse_args()
-    args.data_dir = os.path.join(args.data_dir, args.dataset)
     print('data dir: {}'.format(args.data_dir))
     args.output_dir = os.path.join(args.data_dir, args.out)
     print('output dir: {}'.format(args.output_dir))
