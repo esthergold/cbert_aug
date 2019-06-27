@@ -30,8 +30,6 @@ def main():
     parser = args_of_text_classifier.get_basic_arg_parser()
     parser.add_argument("--data_dir", default="datasets", type=str,
                         help="The input data dir. Should contain the .tsv files for the task.")
-    parser.add_argument("--dataset",default="stsa.binary", type=str,
-                        help="The name of the dataset/task to evaluate.")
     args = parser.parse_args()
     args.data_dir = os.path.join(args.data_dir, args.dataset)
     print('data dir: {}'.format(args.data_dir))
