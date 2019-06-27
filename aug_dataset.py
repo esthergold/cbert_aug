@@ -361,8 +361,8 @@ def run_aug(args, save_every_epoch=False):
     origin_train_path = os.path.join(args.output_dir, "train_origin.tsv")
     save_train_path = os.path.join(args.output_dir, "train.tsv")
     shutil.copy(origin_train_path, save_train_path)
-    best_test_acc = train_text_classifier.train("aug_data")
-    print("before augment best acc:{}".format(best_test_acc))
+    #best_test_acc = train_text_classifier.train("aug_data")
+    #print("before augment best acc:{}".format(best_test_acc))
 
     for e in trange(int(args.num_train_epochs), desc="Epoch"):
         avg_loss = 0.
