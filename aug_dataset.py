@@ -251,7 +251,7 @@ def main():
                         help="The output dir for augmented dataset")
     parser.add_argument("--bert_model", default="bert-base-uncased", type=str,
                         help="The path of pretrained bert model.")
-    parser.add_argument("--task_name",default="subj",type=str,
+    parser.add_argument("--task_name",default="subj", type=str,
                         help="The name of the task to train.")
     parser.add_argument("--max_seq_length", default=64, type=int,
                         help="The maximum total input sequence length after WordPiece tokenization. \n"
@@ -322,7 +322,7 @@ def run_aug(args, save_every_epoch=False):
         weights_path = os.path.join(PYTORCH_PRETRAINED_BERT_CACHE, model_name)
         model = torch.load(weights_path)
         return model
-    cbert_name = "{}/BertForMaskedLM_{}_epoch_10".format(task_name.lower(), task_name.lower())
+    cbert_name = "{}/BertForMaskedLM_{}_epoch_3".format(task_name.lower(), task_name.lower())
     model = load_model(cbert_name)
     model.cuda()
 
