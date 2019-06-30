@@ -270,6 +270,8 @@ def main():
                              "E.g., 0.1 = 10%% of training.")
     parser.add_argument('--seed', type=int, default=42,
                         help="random seed for initialization")
+    parser.add_argument('--finetuned_epoch', type=int, default=3,
+                        help="select what epoch of bert fine-tuning to take")
 
     args = parser.parse_args()
     logger.info("after parser.parse_args()")
