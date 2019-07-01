@@ -367,7 +367,7 @@ def run_aug(args, save_every_epoch=False):
     #print("before augment best acc:{}".format(best_test_acc))
 
     for e in trange(int(args.num_train_epochs), desc="Epoch"):
-        avg_loss = 0.
+        '''avg_loss = 0.
 
         for step, batch in enumerate(train_dataloader):
             model.train()
@@ -380,7 +380,7 @@ def run_aug(args, save_every_epoch=False):
             model.zero_grad()
             if (step + 1) % 50 == 0:
                 print("avg_loss: {}".format(avg_loss / 50))
-                avg_loss = 0
+                avg_loss = 0'''
         torch.cuda.empty_cache()
         shutil.copy(origin_train_path, save_train_path)
         save_train_file = open(save_train_path, 'a')
