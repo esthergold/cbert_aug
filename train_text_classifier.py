@@ -191,7 +191,7 @@ def train(args, print_log=False):
              'main/accuracy', 'validation/main/accuracy',
              'test/main/loss', 'test/main/accuracy',
              # 'elapsed_time']))
-             'elapsed_time']), trigger=record_trigger)
+             'elapsed_time'], out=out), trigger=record_trigger)
     else:
         trainer.extend(extensions.PrintReport(
         ['main/accuracy', 'validation/main/accuracy',
