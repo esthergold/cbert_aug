@@ -7,6 +7,7 @@ import datetime
 import json
 import os
 import numpy
+import sys
 
 import chainer
 from chainer import training
@@ -39,6 +40,20 @@ def main():
     test_acc = train(args, print_log=True)
     print("test acc {} on original dataset {}".format(test_acc, args.dataset))
 
+def train_with_default_args(data_dir, dataset):
+    sys.argv = [sys.argv[0]]
+    parser = args_of_text_classifier.get_basic_arg_parser()
+    args = parser.parse_args()
+    args.data_dir = data_dir
+    args.dataset = dataset
+    print('data dir: {}'.format(args.data_dir))
+    args.output_dir = os.path.join(args.data_dir, args.out)
+    print('output dir: {}'.format(args.output_dir))
+
+    print(json.dumps(args.__dict__, indent=2))
+    test_acc = train(args, print_log=True)
+    print("test acc {} on original dataset {}".format(test_acc, args.dataset))
+    return test_acc
 
 def train(args, print_log=False):
     chainer.CHAINER_SEED = args.seed
@@ -178,9 +193,9 @@ def train(args, print_log=False):
         trainer.extend(extensions.PrintReport(
             ['epoch', 'main/loss', 'validation/main/loss',
              'main/accuracy', 'validation/main/accuracy',
-             'test/main/loss', 'test/main/accuracy',
-             # 'elapsed_time']))
-             'elapsed_time']), trigger=record_trigger)
+             'test/main/loss', 'test/main/accuracy'
+             #, 'elapsed_time'
+         ], out=out), trigger=record_trigger)
     else:
         trainer.extend(extensions.PrintReport(
         ['main/accuracy', 'validation/main/accuracy',

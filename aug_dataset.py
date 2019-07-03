@@ -21,7 +21,7 @@ from pytorch_pretrained_bert.modeling import BertForMaskedLM
 from pytorch_pretrained_bert.optimization import BertAdam
 from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 
-#import train_text_classifier
+import train_text_classifier
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -301,6 +301,7 @@ def run_aug(args, save_every_epoch=False):
     if task_name not in processors:
         raise ValueError("Task not found: %s" % (task_name))
     args.data_dir = os.path.join(args.data_dir, task_name)
+    parent_output_dir = args.output_dir
     args.output_dir = os.path.join(args.output_dir, task_name)
 
     random.seed(args.seed)
@@ -415,8 +416,8 @@ def run_aug(args, save_every_epoch=False):
         torch.cuda.empty_cache()
         bak_train_path = os.path.join(args.output_dir, "train_epoch_{}.tsv".format(e))
         shutil.copy(save_train_path, bak_train_path)
-        #best_test_acc = train_text_classifier.train("aug_data")
-        #print("epoch {} augment best acc:{}".format(e, best_test_acc))
+        best_test_acc = train_text_classifier.train_with_default_args(parent_output_dir, args.task_name)
+        print("epoch {} augment best acc:{}".format(e, best_test_acc))
         if save_every_epoch:
             save_model_name = "BertForMaskedLM_" + task_name + "_epoch_" + str(e + 1)
             save_model_path = os.path.join(save_model_dir, save_model_name)
