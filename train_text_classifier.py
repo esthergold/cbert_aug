@@ -7,6 +7,7 @@ import datetime
 import json
 import os
 import numpy
+import sys
 
 import chainer
 from chainer import training
@@ -40,6 +41,7 @@ def main():
     print("test acc {} on original dataset {}".format(test_acc, args.dataset))
 
 def train_with_default_args(data_dir):
+    sys.argv = [sys.argv[0]]
     parser = args_of_text_classifier.get_basic_arg_parser()
     args = parser.parse_args()
     args.data_dir = data_dir
