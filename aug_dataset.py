@@ -415,7 +415,7 @@ def run_aug(args, save_every_epoch=False):
         torch.cuda.empty_cache()
         bak_train_path = os.path.join(args.output_dir, "train_epoch_{}.tsv".format(e))
         shutil.copy(save_train_path, bak_train_path)
-        best_test_acc = train_text_classifier.train_with_default_args(args.output_dir)
+        best_test_acc = train_text_classifier.train_with_default_args(args.output_dir, args.task_name)
         print("epoch {} augment best acc:{}".format(e, best_test_acc))
         if save_every_epoch:
             save_model_name = "BertForMaskedLM_" + task_name + "_epoch_" + str(e + 1)

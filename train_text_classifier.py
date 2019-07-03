@@ -40,11 +40,12 @@ def main():
     test_acc = train(args, print_log=True)
     print("test acc {} on original dataset {}".format(test_acc, args.dataset))
 
-def train_with_default_args(data_dir):
+def train_with_default_args(data_dir, dataset):
     sys.argv = [sys.argv[0]]
     parser = args_of_text_classifier.get_basic_arg_parser()
     args = parser.parse_args()
     args.data_dir = data_dir
+    args.dataset = dataset
     print('data dir: {}'.format(args.data_dir))
     args.output_dir = os.path.join(args.data_dir, args.out)
     print('output dir: {}'.format(args.output_dir))
