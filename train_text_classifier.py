@@ -53,6 +53,7 @@ def train_with_default_args(data_dir, dataset):
     print(json.dumps(args.__dict__, indent=2))
     test_acc = train(args, print_log=True)
     print("test acc {} on original dataset {}".format(test_acc, args.dataset))
+    return test_acc
 
 def train(args, print_log=False):
     chainer.CHAINER_SEED = args.seed
