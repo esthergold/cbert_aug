@@ -405,13 +405,13 @@ def run_aug(args, save_every_epoch=False):
                 ids[idx] = pred
                 new_str = tokenizer.convert_ids_to_tokens(ids.cpu().numpy())
                 new_str = rev_wordpiece(new_str)
-                tsv_writer.writerow([new_str, seg[0].item(), train_examples[trained_example_index]])
+                tsv_writer.writerow([new_str, seg[0].item(), train_examples[trained_example_index].text_a])
 
                 pred = torch.argsort(preds)[:, -2][idx]
                 ids[idx] = pred
                 new_str = tokenizer.convert_ids_to_tokens(ids.cpu().numpy())
                 new_str = rev_wordpiece(new_str)
-                tsv_writer.writerow([new_str, seg[0].item(), train_examples[trained_example_index]])
+                tsv_writer.writerow([new_str, seg[0].item(), train_examples[trained_example_index].text_a])
 
                 trained_example_index += 1
             torch.cuda.empty_cache()
