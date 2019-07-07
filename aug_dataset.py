@@ -387,6 +387,7 @@ def run_aug(args, save_every_epoch=False):
         save_train_file = open(save_train_path, 'a')
         tsv_writer = csv.writer(save_train_file, delimiter='\t')
         #tsv_writer.writerow(['sentence', 'label'])
+        trained_example_index = 0
         for step, batch in enumerate(train_dataloader):
             model.eval()
             batch = tuple(t.cuda() for t in batch)
@@ -399,18 +400,20 @@ def run_aug(args, save_every_epoch=False):
             predictions = model(init_ids, segment_ids, input_mask)
             for ids, idx, preds, seg in zip(init_ids, masked_idx, predictions, segment_ids):
                 #pred = torch.argsort(pred)[:,-e-1][idx]
-                
+
                 pred = torch.argsort(preds)[:,-1][idx]
                 ids[idx] = pred
                 new_str = tokenizer.convert_ids_to_tokens(ids.cpu().numpy())
                 new_str = rev_wordpiece(new_str)
-                tsv_writer.writerow([new_str, seg[0].item()])
+                tsv_writer.writerow([new_str, seg[0].item(), train_examples[trained_example_index]])
 
                 pred = torch.argsort(preds)[:, -2][idx]
                 ids[idx] = pred
                 new_str = tokenizer.convert_ids_to_tokens(ids.cpu().numpy())
                 new_str = rev_wordpiece(new_str)
-                tsv_writer.writerow([new_str, seg[0].item()])
+                tsv_writer.writerow([new_str, seg[0].item(), train_examples[trained_example_index]])
+
+                trained_example_index += 1
             torch.cuda.empty_cache()
         predictions = predictions.detach().cpu()
         torch.cuda.empty_cache()
