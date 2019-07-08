@@ -387,7 +387,6 @@ def run_aug(args, save_every_epoch=False):
         save_train_file = open(save_train_path, 'a')
         tsv_writer = csv.writer(save_train_file, delimiter='\t')
         #tsv_writer.writerow(['sentence', 'label'])
-        trained_example_index = 0
         for step, batch in enumerate(train_dataloader):
             model.eval()
             batch = tuple(t.cuda() for t in batch)
@@ -395,25 +394,26 @@ def run_aug(args, save_every_epoch=False):
             input_lens = [sum(mask).item() for mask in input_mask]
             #masked_idx = np.squeeze([np.random.randint(1, l-1, 1) for l in input_lens])
             masked_idx = np.squeeze([np.random.randint(0, l, max(l//7,2)) for l in input_lens])
+            original_ids = init_ids.clone()
             for ids, idx in zip(init_ids,masked_idx):
                 ids[idx] = MASK_id
             predictions = model(init_ids, segment_ids, input_mask)
-            for ids, idx, preds, seg in zip(init_ids, masked_idx, predictions, segment_ids):
+            for ids, idx, preds, seg, original_ids in zip(init_ids, masked_idx, predictions, segment_ids, original_ids):
                 #pred = torch.argsort(pred)[:,-e-1][idx]
+                original_str = tokenizer.convert_ids_to_tokens(original_ids.cpu().numpy())
+                original_str = rev_wordpiece(original_str)
 
                 pred = torch.argsort(preds)[:,-1][idx]
                 ids[idx] = pred
                 new_str = tokenizer.convert_ids_to_tokens(ids.cpu().numpy())
                 new_str = rev_wordpiece(new_str)
-                tsv_writer.writerow([new_str, seg[0].item(), train_examples[trained_example_index].text_a])
+                tsv_writer.writerow([new_str, seg[0].item(), original_str])
 
                 pred = torch.argsort(preds)[:, -2][idx]
                 ids[idx] = pred
                 new_str = tokenizer.convert_ids_to_tokens(ids.cpu().numpy())
                 new_str = rev_wordpiece(new_str)
-                tsv_writer.writerow([new_str, seg[0].item(), train_examples[trained_example_index].text_a])
-
-                trained_example_index += 1
+                tsv_writer.writerow([new_str, seg[0].item(), original_str])
             torch.cuda.empty_cache()
         predictions = predictions.detach().cpu()
         torch.cuda.empty_cache()
