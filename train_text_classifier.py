@@ -188,12 +188,12 @@ def train(args, print_log=False):
 
     # Write a log of evaluation statistics for each epoch
     out = Outer()
-    trainer.extend(extensions.LogReport())
+    trainer.extend(extensions.LogReport(filename=args.output_dir+'/classifier.log'))
     if print_log:
         trainer.extend(extensions.PrintReport(
-            ['epoch', 'main/loss', 'validation/main/loss',
+            ['epoch', 'main/loss', 'validation/main/loss', 'test/main/loss',
              'main/accuracy', 'validation/main/accuracy',
-             'test/main/loss', 'test/main/accuracy'
+             'test/main/accuracy'
              #, 'elapsed_time'
          ], out=out), trigger=record_trigger)
     else:
@@ -210,7 +210,7 @@ def train(args, print_log=False):
     # free all unused memory blocks “cached” in the memory pool
     mempool = cupy.get_default_memory_pool()
     mempool.free_all_blocks()
-    #print("val_acc:{}, test_acc:{}\n", out[-2], out[-1])
+    print("val_acc:{}, test_acc:{}\n", out[-2], out[-1])
     return float(out[-1])
 
 if __name__ == '__main__':
